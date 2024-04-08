@@ -1,0 +1,10 @@
+---
+import "../styles/global.css";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Greeting from "../components/Greeting";
+---
+
+<BaseLayout pageTitle="首页">
+  <h2>my blog sub title</h2>
+  <Greeting client:load messages={["Hi", "Hello", "Howdy", "Hey there"]} />
+</BaseLayout>

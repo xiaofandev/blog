@@ -1,0 +1,39 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BlogPost from "../../components/BlogPost.astro";
+
+export async function getStaticPaths() {
+  const allPosts: any = await Astro.glob("../posts/*.md");
+  // 获取不重复的tag列表
+  const uniqueTags = [
+    ...new Set(allPosts.map((post: any) => post.frontmatter.tags).flat()),
+  ];
+
+  return uniqueTags.map((tag) => {
+    // 获取包含该tag的文章列表
+    const filterdPosts = allPosts.filter((post: any) =>
+      post.frontmatter.tags.includes(tag)
+    );
+    return {
+      params: { tag },
+      props: {
+        posts: filterdPosts,
+      },
+    };
+  });
+}
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+---
+
+<BaseLayout pageTitle={tag}>
+  <p>包含「{tag}」标签的文章</p>
+  <ul>
+    {
+      posts.map((post: any) => (
+        <BlogPost url={post.url} title={post.frontmatter.title} />
+      ))
+    }
+  </ul>
+</BaseLayout>
